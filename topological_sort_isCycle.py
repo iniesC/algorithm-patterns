@@ -25,12 +25,9 @@ Explanation: The tasks have cyclic dependency, therefore they cannot be sceduled
 
 '''
 
-
 def isCycle_DFS(node, adjList, visited, recstack, result):
     visited[node] = True
     recstack[node] = True # Keep record of the node in current stack
-
-    result.append(node)
 
     for next_node in adjList[node]:
         if not visited[next_node]:
@@ -39,6 +36,9 @@ def isCycle_DFS(node, adjList, visited, recstack, result):
         elif recstack[next_node] == True: # check for back edges meaning did we see this vertex earlier in current path
             return True
     
+
+    result.append(node) # store the topo order in reverse
+
     recstack[node] = False # pop the node from the stack
     return False
 
@@ -59,7 +59,9 @@ def isPossibleLinearOrder(N, prerequisite):
         if not visited[i]: # start with a task that is not done and has no preprequisite
             if isCycle_DFS(i, adjList, visited, recstack, result):
                 return False
-
+    
+    print("Topological Linear order: ", result[::-1]) # Topological sorted order on a DAG
+    
     return True
 
 
